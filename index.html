@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Stefania, quieres ser mi San Valentín? 💘</title>
+    <!-- Canvas para confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 600px;
+            margin: 20px;
+        }
+        h1 {
+            color: #d6336c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .message {
+            font-size: 1.3rem;
+            color: #444;
+            margin-bottom: 30px;
+        }
+        .photo-container {
+            margin: 20px 0;
+            min-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .photo-container img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            object-fit: cover;
+            border: 4px solid white;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .btn-yes {
+            background: #ff4d6d;
+            color: white;
+        }
+        .btn-yes:hover {
+            background: #c9184a;
+            transform: scale(1.1);
+        }
+        .btn-no {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-no:hover {
+            background: #495057;
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px); }
+            25% { transform: translate(-2px, 0px); }
+            50% { transform: translate(2px, -1px); }
+            75% { transform: translate(-1px, 2px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 20px; }
+            h1 { font-size: 2rem; }
+            .btn { padding: 12px 25px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💖 Stefania 💖</h1>
+        <div class="message" id="question">
+            ¿Quieres ser mi San Valentín?
+        </div>
+        
+        <div class="photo-container" id="photoContainer">
+            <!-- Foto por defecto (tierna) -->
+            <img src="img/default.jpg" alt="Nosotros">
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-yes" id="yesBtn">¡SÍ! 💘</button>
+            <button class="btn btn-no" id="noBtn">No 💔</button>
+        </div>
+    </div>
+
+    <script>
+        // ---------- PERSONALIZA AQUÍ ----------
+        const HER_NAME = "Stefania"; // Cambia esto
+        // Mensajes para cuando intenta decir que no
+        const noMessages = [
+            "¿Segura, Stefania? 😢",
+            "¿No? Piénsalo bien... 🥺",
+            "¿De verdad no? 💔",
+            "Me rompes el corazón... 😭",
+            "¡Última oportunidad! 💘",
+            "No hagas eso... 🤧"
+        ];
+        
+        // FOTOS: Reemplaza estas URLs con las de tus propias fotos
+        const photos = {
+            default: "img/default.jpg", // foto feliz
+            sad: "img/1.jpg",       // foto triste (puede ser una donde salgas serio)
+            happy: "img/feliz.webp"      // foto de celebración
+        };
+        // ----------------------------------------
+
+        let noClickCount = 0;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionEl = document.getElementById('question');
+        const photoContainer = document.getElementById('photoContainer');
+
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Cambiar texto del botón "No"
+            if (noClickCount < noMessages.length) {
+                noBtn.textContent = noMessages[noClickCount];
+            } else {
+                noBtn.textContent = "¡Ya dile que sí! 😤";
+            }
+            
+            // Cambiar foto a una triste
+            photoContainer.innerHTML = `<img src="${photos.sad}" alt="triste">`;
+            
+            // Hacer crecer el botón SÍ
+            let currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 6) + 'px';
+            
+            // Efecto de temblor en el No
+            noBtn.classList.add('shake');
+            setTimeout(() => noBtn.classList.remove('shake'), 500);
+            
+            noClickCount++;
+        });
+
+        yesBtn.addEventListener('click', function() {
+            // Disparar confetti
+            confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            
+            // Cambiar todo el contenido
+            document.querySelector('.container').innerHTML = `
+                <h1 style="color: #ff4d6d;">¡YEEEEI! 🎉</h1>
+                <div class="message" style="font-size: 2rem;">
+                    ¡Gracias, mi amor! 💖
+                </div>
+                <div class="photo-container">
+                    <img src="${photos.happy}" alt="feliz">
+                </div>
+                <p style="font-size: 1.3rem; margin-top: 20px;">
+                    Eres la persona más especial de mi vida. <br>
+                    ¡Feliz San Valentín! ❤️
+                </p>
+            `;
+        });
+    </script>
+</body>
+</html>
