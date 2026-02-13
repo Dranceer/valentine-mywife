@@ -119,8 +119,7 @@
 
     <script>
         // ---------- PERSONALIZA AQUÍ ----------
-        const HER_NAME = "Stefania"; // Cambia esto
-        // Mensajes para cuando intenta decir que no
+        const HER_NAME = "Stefania";
         const noMessages = [
             "¿Segura, Stefania? 😢",
             "¿No? Piénsalo bien... 🥺",
@@ -130,15 +129,21 @@
             "No hagas eso... 🤧"
         ];
         
-        // FOTOS: Reemplaza estas URLs con las de tus propias fotos
         const photos = {
-            default: "img/default.jpg", // foto feliz
-            sad: "img/1.jpg",       // foto triste (puede ser una donde salgas serio)
-            happy: "img/feliz.webp"      // foto de celebración
+            default: "img/default.jpg",
+            sad: "img/1.jpg",
+            sad2: "img/2.jpg",
+            sad3: "img/3.jpg",
+            sad4: "img/4.jpg",
+            happy: "img/feliz.webp"
         };
         // ----------------------------------------
 
+        // Array con las imágenes tristes (en el orden que quieres que aparezcan)
+        const sadPhotos = [photos.sad, photos.sad2, photos.sad3, photos.sad4];
+        let sadIndex = 0;          // Índice para recorrer las imágenes tristes
         let noClickCount = 0;
+
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const questionEl = document.getElementById('question');
@@ -147,21 +152,23 @@
         noBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Cambiar texto del botón "No"
+            // 1. Cambiar el texto del botón "No"
             if (noClickCount < noMessages.length) {
                 noBtn.textContent = noMessages[noClickCount];
             } else {
                 noBtn.textContent = "¡Ya dile que sí! 😤";
             }
             
-            // Cambiar foto a una triste
-            photoContainer.innerHTML = `<img src="${photos.sad}" alt="triste">`;
+            // 2. Cambiar la foto triste (siguiente en el array)
+            photoContainer.innerHTML = `<img src="${sadPhotos[sadIndex]}" alt="triste">`;
+            // Incrementar el índice y volver a 0 si llega al final
+            sadIndex = (sadIndex + 1) % sadPhotos.length;
             
-            // Hacer crecer el botón SÍ
+            // 3. Hacer crecer el botón SÍ
             let currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
             yesBtn.style.fontSize = (currentSize + 6) + 'px';
             
-            // Efecto de temblor en el No
+            // 4. Efecto de temblor en el No
             noBtn.classList.add('shake');
             setTimeout(() => noBtn.classList.remove('shake'), 500);
             
@@ -169,14 +176,12 @@
         });
 
         yesBtn.addEventListener('click', function() {
-            // Disparar confetti
             confetti({
                 particleCount: 200,
                 spread: 70,
                 origin: { y: 0.6 }
             });
             
-            // Cambiar todo el contenido
             document.querySelector('.container').innerHTML = `
                 <h1 style="color: #ff4d6d;">¡YEEEEI! 🎉</h1>
                 <div class="message" style="font-size: 2rem;">
